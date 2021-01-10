@@ -11,6 +11,9 @@ class Task:
         self.date = Сalendar().getFreeTime()
         self.progress = progress
 
+    def Print():
+        pass
+
 
 class Calendar:
     def __init__(self):
@@ -19,13 +22,13 @@ class Calendar:
     def GetFreeTime(self):
         pass
 
-    def GetCurrentDate(self):
-        pass
-
     def NextFreeData(self):
         pass
 
     def PrevData(self):
+        pass
+
+    def Print():
         pass
 
 
@@ -34,16 +37,15 @@ class User:
         self.name = name
         self.female = female
 
+    def Print():
+        pass
+
 
 def InputTask():
     pass
 
 
-def GetTasksToday():
-    pass
-
-
-def GetTasksOfData(target_date: date) -> None:
+def GetTasksOfData(target_date=date.today(): date) -> None:
     pass
 
 
