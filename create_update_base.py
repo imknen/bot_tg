@@ -5,42 +5,48 @@ import os
 
 
 def createDB():
-    con = psycopg2.connect(database='postgres',
-                           port='5432',
-                           host='localhost',
-                           user=NAME,
-                           password=PASSWD)
-    con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
-    cur = con.cursor()
     try:
+        con = psycopg2.connect(database='postgres',
+                               port='5432',
+                               host='localhost',
+                               user=NAME,
+                               password=PASSWD)
+        con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
+        cur = con.cursor()
+
         cur.execute(f'CREATE DATABASE {BASE}')
         print(f'База данных {BASE} успешно создана\n')
-    except psycopg2.ProgrammingError as e:
-        print(f'Base {BASE} already exists\n')
 
-    con.close()
+    except psycopg2.ProgrammingError as e:
+        print(f'Base {BASE} already exists\n'
+              'Либо что то пошло не так\n')
+    finally:
+        cur.close()
+        con.close()
 
 
 class Connection:
 
     def __init__(self):
-       self.conn = psycopg2.connect(database=BASE,
-                                    port='5432',
-                                    host='localhost',
-                                    user=NAME,
-                                    password=PASSWD)
+        try:
+            self.conn = psycopg2.connect(database=BASE,
+                                         port='5432',
+                                         host='localhost',
+                                         user=NAME,
+                                         password=PASSWD)
 
+        except psycopg2.ProgrammingError as e:
+            print("Connection error", error)
 
     def __del__(self):
-       self.conn.close()
-
+        self.conn.close()
 
     def cursor(self):
         return self.conn.cursor()
 
-
     def commit(self):
         self.conn.commit()
+
 
 def getVersionDB():
     conn = Connection()
@@ -49,12 +55,12 @@ def getVersionDB():
         cur.execute('''
                     SELECT fversion FROM db_version
                     ORDER BY fdate DESC LIMIT 1
-                    '''
-                   )
+                    ''')
     except psycopg2.ProgrammingError as e:
-        return ['0' ,'0']
+        return ['0', '0']
 
     rows = cur.fetchall()
+    cur.close()
 
     return (rows[0][0].split('.'))
 
@@ -86,6 +92,7 @@ def Execute(file_query: str, action: str):
     cur = conn.cursor()
     cur.execute(loadQuery(file_query))
     conn.commit()
+    cur.close()
     print(f'\tmigration: {file_query}')
     print_version_DB(f'\t{action}')
 
