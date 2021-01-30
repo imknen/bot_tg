@@ -1,3 +1,6 @@
 *.vim
 todo.txt
 *.swp
+__pycache__
+data_db_login.py
+test.py
