@@ -5,6 +5,7 @@ import os
 
 
 def createDB():
+    print('Create DB:')
     try:
         con = psycopg2.connect(database='postgres',
                                port='5432',
@@ -34,15 +35,14 @@ class Connection:
                                          host='localhost',
                                          user=NAME,
                                          password=PASSWD)
+            self.cursor = self.conn.cursor()
 
         except psycopg2.ProgrammingError as e:
             print("Connection error", error)
 
     def __del__(self):
+        self.cursor.close()
         self.conn.close()
-
-    def cursor(self):
-        return self.conn.cursor()
 
     def commit(self):
         self.conn.commit()
@@ -50,7 +50,7 @@ class Connection:
 
 def getVersionDB():
     conn = Connection()
-    cur = conn.cursor()
+    cur = conn.cursor
     try:
         cur.execute('''
                     SELECT fversion FROM db_version
@@ -60,7 +60,6 @@ def getVersionDB():
         return ['0', '0']
 
     rows = cur.fetchall()
-    cur.close()
 
     return (rows[0][0].split('.'))
 
@@ -89,10 +88,9 @@ def print_version_DB(action='current'):
 
 def Execute(file_query: str, action: str):
     conn = Connection()
-    cur = conn.cursor()
+    cur = conn.cursor
     cur.execute(loadQuery(file_query))
     conn.commit()
-    cur.close()
     print(f'\tmigration: {file_query}')
     print_version_DB(f'\t{action}')
 
@@ -118,7 +116,7 @@ def updateDB():
 
 
 def clearDB():
-    print('Deleting DB')
+    print('Deleting DB:')
     print_version_DB()
     info = getInfo()
     list_down_migration = info['down']
@@ -127,7 +125,8 @@ def clearDB():
                                      list_down_migration))
     if not list_for_downgrade:
         print('database is already on the first change')
-    for file_name in list_for_downgrade:
-        Execute(file_name, 'downgrade to')
+    else:
+        for file_name in list_for_downgrade:
+            Execute(file_name, 'downgrade to')
 
     print('')
