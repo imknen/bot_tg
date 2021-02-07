@@ -2,7 +2,7 @@ from data_db_login import NAME, PASSWD, BASE
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 import os
-
+import re
 
 def createDB():
     print('Create DB:')
@@ -20,7 +20,7 @@ def createDB():
 
     except psycopg2.ProgrammingError as e:
         print(f'Base {BASE} already exists\n'
-              'Либо что то пошло не так\n')
+              'Либо что то пошло не так')
     finally:
         cur.close()
         con.close()
@@ -66,8 +66,10 @@ def getVersionDB():
 
 def getInfo():
     file_names = os.listdir('./migrations')
+    files_migragion = list(filter(lambda x: re.fullmatch(r'\w+.sql', x),
+                           file_names))
     ret = {'up': [], 'down': []}
-    for name in file_names:
+    for name in files_migragion:
         ret[name.split('_')[0]].append(name)
 
     ret['up'].sort()
@@ -112,8 +114,6 @@ def updateDB():
         for file_name in list_for_update:
             Execute(file_name, 'update to')
 
-    print('')
-
 
 def clearDB():
     print('Deleting DB:')
@@ -128,5 +128,3 @@ def clearDB():
     else:
         for file_name in list_for_downgrade:
             Execute(file_name, 'downgrade to')
-
-    print('')
