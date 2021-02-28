@@ -19,8 +19,7 @@ def createDB():
         print(f'База данных {BASE} успешно создана\n')
 
     except psycopg2.ProgrammingError as e:
-        print(f'Base {BASE} already exists\n'
-              'Либо что то пошло не так')
+        print(f'Base {BASE} already exists\n')
     finally:
         cur.close()
         con.close()

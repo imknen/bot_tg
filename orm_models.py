@@ -17,10 +17,43 @@ class BaseModel(Model):
 
 
 class Version_DB(BaseModel):
-    id = AutoField()
+    id_record = AutoField()
     fversion = CharField()
     fdate = DateTimeField()
     fdescription = CharField()
 
     class Meta:
         db_table = 'db_version'
+
+
+class Task(BaseModel):
+    id_task = AutoField()
+    fdata = DateTimeField()
+    ftask = CharField()
+    fdescription = CharField()
+    fparent = IntegerField()
+    fcompleted = DateTimeField()
+
+    class Meta:
+        db_table = 'tasks'
+
+
+class Remainder(BaseModel):
+    id_remainder = AutoField()
+    ftask = IntegerField()
+    fmessage = CharField()
+    fdata_remainder = DateTimeField()
+
+    class Meta:
+        db_table = 'remainders'
+
+
+class User(BaseModel):
+    id_user = IntegerField()
+    fname = CharField()
+    ffemale = CharField()
+    fpatronymic = CharField()
+    f_nick = CharField()
+
+    class Meta:
+        db_table = 'users'

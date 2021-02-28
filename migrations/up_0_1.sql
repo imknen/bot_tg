@@ -1,11 +1,11 @@
 START TRANSACTION;
 
 CREATE TABLE db_version (
-	id		serial,
+	id_record		serial,
 	fversion 	varchar (20),
 	fdate 		timestamp not null,
 	fdescription	varchar(256),
-	CONSTRAINT  id_record_pk PRIMARY KEY(id)
+	CONSTRAINT  	pk_history PRIMARY KEY(id_record)
 ) ;
 
 INSERT INTO db_version(fversion, fdate, fdescription)
