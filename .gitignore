@@ -3,3 +3,4 @@ todo.txt
 *.swp
 __pycache__
 data_db_login.py
+variables.py
