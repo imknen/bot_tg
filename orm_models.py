@@ -40,7 +40,7 @@ class Task(BaseModel):
 
 class Remainder(BaseModel):
     id_remainder = AutoField()
-    ftask = ForeignKeyField()
+    ftask = ForeignKeyField(Task, backref='remainders')
     fmessage = CharField()
     fdata_remainder = DateTimeField()
 

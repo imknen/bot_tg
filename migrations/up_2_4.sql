@@ -12,7 +12,7 @@ CREATE TABLE tasks (
 
 CREATE TABLE remainders (
     id_remainder     serial,
-    ftask	     integer REFERENCES tasks not NULL,
+    ftask	      integer REFERENCES tasks not NULL,
     fmessage         varchar(999),
     fdata_remainder  timestamp not NULL,
     CONSTRAINT       pk_remainder PRIMARY KEY(id_remainder)
