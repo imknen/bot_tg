@@ -20,5 +20,31 @@ def start_handler(message):
 def help_handler(message):
     bot.send_message(message.from_user.id, help_mess)
 
+
+@bot.message_handler(commands=['task'])
+def task(message):
+    pass
+
+
+@bot.message_handler(commands=['sub_task'])
+def sub_task(message):
+    pass
+
+
+@bot.message_handler(commands=['remainder'])
+def remainder(message):
+    pass
+
+
+@bot.message_handler(commands=['list'])
+def list_tasks(message):
+    pass
+
+
+@bot.message_handler(commands=['list_today'])
+def list_today(message):
+    pass
+
+
 if __name__ == '__main__':
     main(True, 'DEBUG')
